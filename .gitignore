@@ -1,0 +1,8 @@
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+**/*.pbix
+**/.vs/
+**/bin/
+**/obj/
+.DS_Store
+Thumbs.db

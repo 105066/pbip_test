@@ -1,0 +1,144 @@
+table Data
+	lineageTag: b22778d4-3aa4-4329-a0d2-20a764297470
+
+	column cert_id
+		dataType: string
+		lineageTag: 71ea2d26-3685-48de-8be0-404b17fc92ea
+		summarizeBy: none
+		sourceColumn: cert_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Production_Site_PSN
+		dataType: string
+		lineageTag: ece0b2c2-0c46-4a73-a2d7-1ebf98e1454e
+		summarizeBy: none
+		sourceColumn: Production_Site_PSN
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Production Site Name'
+		dataType: string
+		lineageTag: 6bf01da1-8d05-42d4-bfd0-3add12e83fed
+		summarizeBy: none
+		sourceColumn: Production Site Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Production Site Address'
+		dataType: string
+		lineageTag: ae51380f-11a6-4d95-9288-ea2bc1905c8f
+		summarizeBy: none
+		sourceColumn: Production Site Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column scheme
+		dataType: string
+		lineageTag: b24ae23f-de98-4fe3-9c19-76db7777b32a
+		summarizeBy: none
+		sourceColumn: scheme
+
+		annotation SummarizationSetBy = Automatic
+
+	column certificate_name
+		dataType: string
+		lineageTag: a40c6fbd-aaf5-4b8e-aefe-c27c4b01fb0f
+		summarizeBy: none
+		sourceColumn: certificate_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column rev_number
+		dataType: string
+		lineageTag: 74372a32-e811-4cb6-abc8-2ba6e0887a61
+		summarizeBy: none
+		sourceColumn: rev_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column model
+		dataType: string
+		lineageTag: 26177888-5660-4410-8c17-c57f12ac451a
+		summarizeBy: none
+		sourceColumn: model
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_type
+		dataType: string
+		lineageTag: af36ce46-d0cc-45a6-875a-a465c996b7c7
+		summarizeBy: none
+		sourceColumn: product_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trademark
+		dataType: string
+		lineageTag: fcb50518-51a1-4b1e-97c0-ef7921d7baf2
+		summarizeBy: none
+		sourceColumn: Trademark
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand_Name
+		dataType: string
+		lineageTag: 28086027-cd81-4d87-9c2b-2ea54c160e1c
+		summarizeBy: none
+		sourceColumn: Brand_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trademark_or_Brand
+		dataType: string
+		lineageTag: db0b5416-650b-4131-a870-d91464ea876f
+		summarizeBy: none
+		sourceColumn: Trademark_or_Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Certified_Product
+		dataType: string
+		lineageTag: 147395b1-32b2-42e1-a0f4-51a4a32e4be7
+		summarizeBy: none
+		sourceColumn: Certified_Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Scope
+		dataType: string
+		lineageTag: de78a0a5-816a-479c-90d5-030bc64f9d3b
+		summarizeBy: none
+		sourceColumn: Product_Scope
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Name
+		dataType: string
+		lineageTag: a933334c-904d-4800-b5c4-1258fe48a3ba
+		summarizeBy: none
+		sourceColumn: Product_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Display
+		dataType: string
+		lineageTag: ea37114a-e30d-45dc-9cbd-955546b1d1d1
+		summarizeBy: none
+		sourceColumn: Product_Display
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Data = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\105066\OneDrive - UL Solutions\Desktop\Ewelina\Working\ad-hocs\Mattia\ProductionSites+Trademarks.xlsx"), null, true),
+				    Data_Sheet = Source{[Item="Data",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Data_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"cert_id", type text}, {"Production_Site_PSN", type any}, {"Production Site Name", type text}, {"Production Site Address", type text}, {"scheme", type text}, {"certificate_name", type any}, {"rev_number", type any}, {"model", type text}, {"product_type", type text}, {"Trademark", type text}, {"Brand_Name", type text}, {"Trademark_or_Brand", type text}, {"Certified_Product", type text}, {"Product_Scope", type text}, {"Product_Name", type text}, {"Product_Display", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
