@@ -1,7 +1,7 @@
-# Git & GitHub Guide for This Project
+# pbip_test
 
-A first-timer's manual for saving and syncing this Power BI Project (PBIP) with GitHub,
-based on the setup we did on 2026-09-16.
+A Power BI Project (PBIP) tracked in Git/GitHub. This README doubles as a first-timer's manual
+for saving and syncing this project with GitHub, based on the setup we did on 2026-09-16.
 
 ## 1. One-time machine setup
 
