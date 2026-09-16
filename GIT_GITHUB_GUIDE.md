@@ -122,7 +122,50 @@ feature:                    └── 3f1a2b9 ────┘
 3. `git push` sends your commits to GitHub; `git pull` brings down others' commits.
 4. When a branch is ready, **merge** it back (directly, or via a pull request on GitHub).
 
-## 3. Setting up this repo (already done, for reference)
+## 3. Branching best practices for Power BI (PBIP) projects
+
+Branching works a bit differently for Power BI than for regular code, because most changes
+happen inside Power BI Desktop (not a text editor), and Power BI Desktop always opens the
+files that are currently on disk for whatever branch is checked out. Keep these in mind:
+
+- **One person per branch per file, at a time.** Power BI report/model files (`report.json`,
+  `.tmdl` files) are text-based and diffable, but Power BI Desktop doesn't merge them for you —
+  Git does, line by line. If two people restructure the same page or table on different branches,
+  you'll get a conflict that has to be resolved by hand. Prefer short-lived branches scoped to
+  one person/one feature to minimize overlap.
+- **Branch per feature, not per person.** Name branches after what they do, e.g.
+  `feature/certificate-display-column`, `feature/new-sales-page`, `fix/typo-in-measure`, not
+  `john-branch`. This makes the purpose obvious in `gh pr create` and `git log`.
+- **Close Power BI Desktop (or reload the file) before switching branches.** If you check out a
+  different branch while Power BI Desktop has the `.pbip` open, it keeps the old version in
+  memory and can overwrite your branch's files on save. Switch branches first, *then* open
+  Power BI Desktop.
+- **Keep branches short-lived.** Long-lived branches drift far from `master`, and reconciling
+  large TMDL/report diffs is much harder than reconciling small ones. Merge or rebase often.
+- **Use pull requests for review even solo.** `gh pr create` + `gh pr merge` gives you a diff
+  view of exactly what changed in the model/report before it lands in `master` — useful for
+  catching accidental changes (e.g., Power BI Desktop silently reformatting a file).
+- **Split unrelated changes into separate branches/commits.** Don't mix a new calculated column
+  with a page layout redesign in the same branch — it makes review and rollback harder.
+- **Semantic model vs. report changes.** Consider whether a change touches `*.SemanticModel`
+  (data model, DAX, relationships) or `*.Report` (visuals, pages, formatting) — these are
+  independent concerns and often safe to branch/merge separately.
+- **Typical solo workflow:**
+  ```powershell
+  git checkout master
+  git pull
+  git checkout -b feature/new-measure
+  # close/reopen Power BI Desktop, make your changes, save
+  git add -A
+  git commit -m "Add new measure for X"
+  git push -u origin feature/new-measure
+  gh pr create --fill
+  gh pr merge --squash --delete-branch
+  git checkout master
+  git pull
+  ```
+
+## 4. Setting up this repo (already done, for reference)
 
 ```powershell
 git init
@@ -134,7 +177,7 @@ gh repo create pbip_test --public --source=. --remote=origin --push
 `gh repo create ... --source=. --remote=origin --push` does three things at once:
 creates the GitHub repo, wires it up as `origin`, and pushes your first commit.
 
-## 4. `.gitignore` for PBIP projects
+## 5. `.gitignore` for PBIP projects
 
 Power BI Desktop writes local-only cache/settings files that shouldn't be committed
 (they're machine-specific and can be large). Our `.gitignore`:
@@ -150,7 +193,7 @@ Power BI Desktop writes local-only cache/settings files that shouldn't be commit
 Thumbs.db
 ```
 
-## 5. Everyday workflow — the 3 commands you'll use most
+## 6. Everyday workflow — the 3 commands you'll use most
 
 Whenever you change something in Power BI Desktop (or edit `.tmdl`/`.json` files directly):
 
@@ -165,7 +208,7 @@ To get other people's changes (or your own from another machine):
 git pull
 ```
 
-## 6. Handy Git commands cheat sheet
+## 7. Handy Git commands cheat sheet
 
 | Command | What it does |
 |---|---|
@@ -186,7 +229,7 @@ git pull
 | `git clone <url>` | Copy a GitHub repo to your machine |
 | `git remote -v` | Show configured remotes (e.g. `origin`) |
 
-## 7. Handy GitHub CLI (`gh`) cheat sheet
+## 8. Handy GitHub CLI (`gh`) cheat sheet
 
 | Command | What it does |
 |---|---|
@@ -200,7 +243,7 @@ git pull
 | `gh issue create` | Create an issue |
 | `gh browse` | Open the current repo/file in the browser |
 
-## 7. Tips & gotchas
+## 9. Tips & gotchas
 
 - **PATH not updating in an open terminal**: after installing something new, existing terminal
   sessions won't see it. Open a new terminal, or refresh manually:
@@ -224,7 +267,7 @@ git pull
   undoing the change) over `git reset` on shared history, since it doesn't rewrite history other
   people may have already pulled.
 
-## 8. Where this repo lives
+## 10. Where this repo lives
 
 - Remote: https://github.com/105066/pbip_test
 - Default branch: `master`
