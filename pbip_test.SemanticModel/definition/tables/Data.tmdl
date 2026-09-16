@@ -129,6 +129,14 @@ table Data
 
 		annotation SummarizationSetBy = Automatic
 
+	column 'Certificate Display' = Data[certificate_name] & " (Rev " & Data[rev_number] & ")"
+		dataType: string
+		lineageTag: f8112b3c-dd35-4381-974c-8dd2e748dd9e
+		summarizeBy: none
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Data = m
 		mode: import
 		source =
